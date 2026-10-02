@@ -335,6 +335,8 @@ def main():
                 optim_wrapper = dict(
                     type='DeepSpeedOptimWrapper',
                     optimizer=cfg.optim_wrapper.optimizer)
+                if 'paramwise_cfg' in cfg.optim_wrapper:
+                    optim_wrapper['paramwise_cfg'] = cfg.optim_wrapper.paramwise_cfg
                 cfg.__setitem__('optim_wrapper', optim_wrapper)
                 cfg.runner_type = 'FlexibleRunner'
 
@@ -351,7 +353,6 @@ def main():
             # build customized runner from the registry
             # if 'runner_type' is set in the cfg
             runner = RUNNERS.build(cfg)
-
         # start training
         runner.train()
 
